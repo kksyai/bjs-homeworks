@@ -48,16 +48,34 @@ function showSolutionsMessage(a, b, c){
     }
 }
 
-___________________________________________________
+//////////////////////////////////////////////
+
+const data = {
+    'algebra': [2, 4, 5, 2, 3, 4],
+    'geomerty': [2, 4, 5],
+    'russian': [3, 3, 4, 5],
+    'physics': [5, 5],
+    'music': [2, 2, 6],
+    'english': [4, 4, 3],
+    'poetry': [5, 3, 4],
+    'chemistry': [2],
+    'french': [4, 4]
+}
 
 function getAverageScore(data) {
     let newObject = {};
+    let sumAverage = 0;
+    let keyCount = 0;
     for(let key in data) {
-        newObject[key] = getAverageMark(data[key]);
+        newObject[key] = getAverageMark(data[key]);   
+        sumAverage += getAverageMark(data[key]);
+        keyCount += 1;
     }
+    newObject['average'] = sumAverage / keyCount;
     return newObject;
 }
 
+let xxx = getAverageScore(data);
 
 function getAverageMark(marks) {
     let sum = 0;
@@ -68,11 +86,14 @@ function getAverageMark(marks) {
     if(marks.length == 0) {
         average = 0;
     }
-
     return average;
 }
 
-___________________________________________________
+console.log('объект предмет/среднее значение оценок', xxx);
+// console.log ('длинна массива предметов', Object.keys(getAverageScore(data)).length);
+
+
+///////////////////////////////////////////////////
 
 function getPersonData(secretData) {
     let newObject = {};
