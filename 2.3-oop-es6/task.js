@@ -104,7 +104,6 @@ class StudentLog {
     addGrade(grade, subject) {
 
         if((grade >= 1) && (grade <= 5)) {
-            console.log('нормальная оценка')
             if (this.totalGrades.hasOwnProperty(subject)) {
                 this.totalGrades[subject].push(grade);
                 return this.totalGrades[subject].length;
@@ -115,33 +114,40 @@ class StudentLog {
             }
    
         } else {
-            console.log(`Вы пытались поставить оценку ${grade} по предмету ${subject}. Допускаются только числа от 1 до 5.`)
-            return this.totalGrades[subject].length;
+            console.log(`Вы пытались поставить оценку ${grade} по предмету ${subject}. Допускаются только числа от 1 до 5.`);
+            if(this.totalGrades.hasOwnProperty(subject)){
+                return this.totalGrades[subject].length;
+            } else {
+                return 0;
+            }                
         }
-
-    // console.log(`количество!!!! оценок ${subject}`, this.totalGrades.length);
     }
 
     getAverageBySubject(subject){
-
+        if(this.totalGrades.hasOwnProperty(subject)){
+            let sum = 0;
+            for(let grade of this.totalGrades[subject]) {
+                sum += grade;
+            }
+            const average = sum / this.totalGrades[subject].length;
+            return average;
+            
+        } else {
+            return 0;
+        }
     }
 
     getTotalAverage(){
-
+        let counter = 0; 
+        let totalSum = 0;
+        for(let subject in this.totalGrades){  
+            counter ++;
+            if(this.totalGrades.hasOwnProperty(subject)){
+                totalSum += this.getAverageBySubject(subject);                
+            } else {
+                totalSum += 0;
+            }
+        }
+        return totalSum / counter;
     }
 }
-
-
-const log = new StudentLog('Олег Никифоров');
-
-console.log(log.addGrade(3, 'algebra'));
-console.log(log.addGrade(4, 'algebra'));
-
-// console.log(log.getName());
-// console.log(typeof log.grade)
-
-
-console.log(log.addGrade('отлично!', 'math'));
-console.log(log.addGrade(5, 'geometry'));
-console.log(log.addGrade(5, 'poetry'));
-console.log(log.addGrade(25, 'geometry'));
