@@ -1,39 +1,36 @@
+'use srtict';
 console.clear();
 
-const weapons = [
-    new Knife(), 
-    new Staff(), 
-    new Axe(), 
-    new StormStaff(), 
-    new LongBow(), 
-    new Bow()
-];
+// const weapons = [
+//     new Knife(), 
+//     new Staff(), 
+//     new Axe(), 
+//     new StormStaff(), 
+//     new LongBow(), 
+//     new Bow()
+// ];
 
-function getNames() {
-return weapons.map(weapon => weapon.name);
-}
+// function getNames() {
+// return weapons.map(weapon => weapon.name);
+// }
 
-function getCountReliableWeapons(durability) {
-    const strongWeapon = weapons.filter(weapon => weapon.durability > durability);
-    return strongWeapon.length;
-}
+// function getCountReliableWeapons(durability) {
+//     return weapons.filter(weapon => weapon.durability > durability).length;
+// }
 
-function hasReliableWeapons(durability) {
-    return weapons.some(weapon => weapon.durability > durability);
-}
+// function hasReliableWeapons(durability) {
+//     return weapons.some(weapon => weapon.durability > durability);
+// }
 
-function getReliableWeaponsNames(durability) {
-    const stWeapon = weapons.filter(weapon => weapon.durability > durability);
-    return stWeapon.map(weapon => weapon.name);
-}
+// function getReliableWeaponsNames(durability) {
+//     return weapons.filter(weapon => weapon.durability > durability).map(weapon => weapon.name);
+// }
 
-function getTotalDamage() {
-    let allAttack = weapons.map(weapon => weapon.attack);
-    let result = allAttack.reduce(function (sum, current){
-            return sum + current;
-        }, 0);
-    return result;
-}
+// function getTotalDamage() {
+//     return weapons.map(weapon => weapon.attack).reduce((sum, current) => sum + current, 0);
+// }
+
+
 
 // 3.2 - 2 /////////////////////////////////////
 
@@ -51,35 +48,30 @@ function sum(...args) {
   }
 
 function compareArrays(arr1, arr2){
-    // return arr1.every((elem, index) => elem === arr2[index]);
-    if (arr1.length === arr2.length){
-        return arr1.every(elem => elem === arr2[arr1.indexOf(elem)]);
-    } 
-    return false;
+  return (arr1.length === arr2.length) && (arr1.every((elem, index) => elem === arr2[index]));
 }
 
-function memorize(fm, limit) {
+function memorize(getFunction, limit) {
   const memory = [];  
     return (...args) => {
-      const XXX = memory.find(eachElement => compareArrays(eachElement.args, args));
-      if(XXX !== undefined) {
-        return XXX.result;
-      } else {
-          memory.push({args: args, result: fm(...args)});
-          if(memory.length > limit){
-            memory.splice(0, memory.length - limit);
-          }
-          return fm(...args);
+      const memoryItem = memory.find(eachElement => compareArrays(eachElement.args, args));
+      if(memoryItem) {
+        return memoryItem.result;
       }
+      memory.push({args: args, result: getFunction(...args)});
+      if(memory.length > limit){
+        memory.splice(0, memory.length - limit);
+      }
+      return memory[memory.length - 1].result;
     }
 }
 
 // sum считает сумму всех переданных аргументов
-function sum (...args){ 
+function sum(...args) { 
   return args.reduce((sum, current) => sum + current, 0);
 }
 
-const mSum = memorize(sum, 2) // переменная mSum хранит сумму всех переданных аргументов
+const mSum = memorize(sum, 3) // переменная mSum хранит сумму всех переданных аргументов
 
 console.log(mSum(3, 4, 10));
 console.log(mSum(3, 4, 1)); 
