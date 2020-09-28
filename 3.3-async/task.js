@@ -27,6 +27,7 @@ class AlarmClock {
     removeClock(id){
         const x = this.alarmCollection.findIndex(eachElement => eachElement.id === id);
         this.alarmCollection.splice(x, 1);
+        x.length != this.alarmCollection.length ? console.log(`будильник № ${id} удален`) : console.log(`будильник № ${id} не удален`)
     }
     
     getCurrentFormattedTime(){
@@ -35,23 +36,15 @@ class AlarmClock {
 
 
     start(){
-
-        function checkClock(eachElement){
-            const F = this.alarmCollection.every(eachElement => eachElement.id === id);
-            console.log(`таймер № ${id} время ${F.time}`);
-            console.log(`текущее время ${this.getCurrentFormattedTime()}`);
-
-            if (F.time === this.getCurrentFormattedTime){
-                F.callback();
-            
-            }else{
-                setInterval(checkClock, 1000);
-            }  
-
-            if(this.timerId === null){
-                this.timerId = setInterval((this.alarmCollection.every(eachElement => checkClock(eachElement)), 1000));
+        let checkClock = () => this.alarmCollection.forEach(eachElement => { 
+            if(eachElement.time == this.getCurrentFormattedTime()) {
+                eachElement.callback();
             }
-        }
+        });
+
+        if(this.timerId === null) {
+            this.timerId = setInterval(checkClock, 1000);
+        }  
     }
 
     stop(){
@@ -66,19 +59,33 @@ class AlarmClock {
     }
 
     clearAlarms(){
-        clearInterval(this.timerId);
+        stop(this.timerId);
         this.alarmCollection.splice(0, this.alarmCollection.length);
     }
-
 }
 
-// const XXX = new AlarmClock;
-// XXX.addClock('11:00', ()=>console.log('time to wake up!'), 5)
-// console.log('alarmCollection', XXX.alarmCollection);
 
-// console.log(XXX.getCurrentFormattedTime());
-// XXX.printAlarms();
-// XXX.start(4);
+
+
+
+let testCase = () => {
+    const newTimer = new AlarmClock;
+    newTimer.addClock('19:12', ()=>console.log('time to wake up!'), 5);
+    newTimer.addClock('19:13', ()=> console.log('move your ass'), 1); 
+    newTimer.addClock('18:11', ()=>console.log('u r so late'), 2);
+
+    // console.log('alarmCollection', newTimer.alarmCollection);
+    // console.log(newTimer.getCurrentFormattedTime());
+    newTimer.printAlarms();
+    newTimer.removeClock(2);
+
+    newTimer.addClock('19:44', ()=>console.log('u r so late'), 3);
+    newTimer.start();
+    newTimer.stop();
+    newTimer.clearAlarms();
+    newTimer.printAlarms();
+}
+
 
 
 
